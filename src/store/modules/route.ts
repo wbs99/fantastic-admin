@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash-es'
 import type { RouteRecordRaw } from 'vue-router'
 import useSettingsStore from './settings'
-import useUserStore from './user'
+import { useUserStore } from './user'
 import api from '@/api/request'
 import { resolveRoutePath } from '@/utils'
 import { systemRoutes } from '@/router/routes'

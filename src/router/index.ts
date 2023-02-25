@@ -7,7 +7,7 @@ import { asyncRoutes, asyncRoutesByFilesystem, constantRoutes, constantRoutesByF
 import pinia from '@/store'
 import useSettingsStore from '@/store/modules/settings'
 import useKeepAliveStore from '@/store/modules/keepAlive'
-import useUserStore from '@/store/modules/user'
+import { useUserStore } from '@/store/modules/user'
 import useMenuStore from '@/store/modules/menu'
 import useRouteStore from '@/store/modules/route'
 
@@ -139,7 +139,7 @@ router.afterEach((to, from) => {
   if (from.meta.cache) {
     const componentName = from.matched.at(-1)?.components?.default.name
     if (componentName) {
-    // 通过 meta.cache 判断针对哪些页面进行缓存
+      // 通过 meta.cache 判断针对哪些页面进行缓存
       switch (typeof from.meta.cache) {
         case 'string':
           if (from.meta.cache !== to.name) {

@@ -27,10 +27,10 @@ export default ({ mode, command }) => {
       open: true,
       port: 9000,
       proxy: {
-        '/proxy': {
+        '/api/v1': {
           target: env.VITE_APP_API_BASEURL,
           changeOrigin: command === 'serve' && env.VITE_OPEN_PROXY === 'true',
-          rewrite: path => path.replace(/\/proxy/, ''),
+          rewrite: path => path.replace(/\/api\/v1/, ''),
         },
       },
     },

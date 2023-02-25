@@ -5,3 +5,10 @@ type Login = {
   password: string
   remember: boolean
 }
+type Me = {
+  id: string;
+  username: string;
+  nickname: string;
+  roles: string[];
+  permissions: string[];
+}

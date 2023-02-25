@@ -1,151 +1,7 @@
-<route lang="yaml">
-meta:
-  title: 登录
-  constant: true
-  layout: false
-</route>
-
-<script lang="ts" setup name="Login">
-import type { FormInstance, FormRules } from 'element-plus'
-import { ElMessage } from 'element-plus'
-import useUserStore from '@/store/modules/user'
-
-const route = useRoute()
-const router = useRouter()
-
-const userStore = useUserStore()
-
-const banner = new URL('../assets/images/login-banner.png', import.meta.url).href
-const title = import.meta.env.VITE_APP_TITLE
-
-// 表单类型，login 登录，reset 重置密码
-const formType = ref('login')
-const loading = ref(false)
-const redirect = ref(route.query.redirect?.toString() ?? '/')
-
-// 登录
-const loginFormRef = ref<FormInstance>()
-const loginForm = ref({
-  username: localStorage.login_username || 'admin',
-  password: 'admin123',
-  remember: !!localStorage.login_username,
-})
-const loginRules = ref<FormRules>({
-  username: [
-    { required: true, trigger: 'blur', message: '请输入用户名' },
-  ],
-  password: [
-    { required: true, trigger: 'blur', message: '请输入密码' },
-    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
-  ],
-})
-function handleLogin() {
-  loginFormRef.value && loginFormRef.value.validate((valid) => {
-    if (valid) {
-      loading.value = true
-      userStore.login(loginForm.value).then(() => {
-        loading.value = false
-        if (loginForm.value.remember) {
-          localStorage.setItem('login_username', loginForm.value.username)
-        }
-        else {
-          localStorage.removeItem('login_username')
-        }
-        router.push(redirect.value)
-      }).catch(() => {
-        loading.value = false
-      })
-    }
-  })
-}
-
-// 注册
-const registerFormRef = ref<FormInstance>()
-const registerForm = ref({
-  username: '',
-  captcha: '',
-  password: '',
-  checkPassword: '',
-})
-const registerRules = ref<FormRules>({
-  username: [
-    { required: true, trigger: 'blur', message: '请输入用户名' },
-  ],
-  captcha: [
-    { required: true, trigger: 'blur', message: '请输入验证码' },
-  ],
-  password: [
-    { required: true, trigger: 'blur', message: '请输入密码' },
-    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
-  ],
-  checkPassword: [
-    { required: true, trigger: 'blur', message: '请再次输入密码' },
-    {
-      validator: (rule, value, callback) => {
-        if (value !== registerForm.value.password) {
-          callback(new Error('两次输入的密码不一致'))
-        }
-        else {
-          callback()
-        }
-      },
-    },
-  ],
-})
-function handleRegister() {
-  ElMessage({
-    message: '注册模块仅提供界面演示，无实际功能，需开发者自行扩展',
-    type: 'warning',
-  })
-  registerFormRef.value && registerFormRef.value.validate((valid) => {
-    if (valid) {
-      // 这里编写业务代码
-    }
-  })
-}
-
-// 重置密码
-const resetFormRef = ref<FormInstance>()
-const resetForm = ref({
-  username: localStorage.login_username || '',
-  captcha: '',
-  newPassword: '',
-})
-const resetRules = ref<FormRules>({
-  username: [
-    { required: true, trigger: 'blur', message: '请输入用户名' },
-  ],
-  captcha: [
-    { required: true, trigger: 'blur', message: '请输入验证码' },
-  ],
-  newPassword: [
-    { required: true, trigger: 'blur', message: '请输入新密码' },
-    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
-  ],
-})
-function handleReset() {
-  ElMessage({
-    message: '重置密码模块仅提供界面演示，无实际功能，需开发者自行扩展',
-    type: 'warning',
-  })
-  resetFormRef.value && resetFormRef.value.validate((valid) => {
-    if (valid) {
-      // 这里编写业务代码
-    }
-  })
-}
-
-function testAccount(username: string) {
-  loginForm.value.username = username
-  loginForm.value.password = '123456'
-  handleLogin()
-}
-</script>
-
 <template>
   <div>
     <div class="bg-banner" />
-    <div id="login-box">
+    <div class="login-box">
       <div class="login-banner">
         <div class="logo" />
         <img :src="banner" class="banner">
@@ -169,7 +25,7 @@ function testAccount(username: string) {
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" type="password" placeholder="密码" tabindex="2" autocomplete="on"
-              show-password @keyup.enter="handleLogin">
+              show-password @keyup.enter="onLogin">
               <template #prefix>
                 <el-icon>
                   <svg-icon name="ep:lock" />
@@ -186,7 +42,7 @@ function testAccount(username: string) {
             忘记密码了?
           </el-link>
         </div>
-        <el-button :loading="loading" type="primary" size="large" style="width: 100%;" @click.prevent="handleLogin">
+        <el-button :loading="loading" type="primary" size="large" style="width: 100%;" @click.prevent="onLogin">
           登录
         </el-button>
         <div class="sub-link">
@@ -256,7 +112,7 @@ function testAccount(username: string) {
           </el-form-item>
         </div>
         <el-button :loading="loading" type="primary" size="large" style="width: 100%; margin-top: 20px;"
-          @click.prevent="handleRegister">
+          @click.prevent="onRegister">
           注册
         </el-button>
         <div class="sub-link">
@@ -307,7 +163,7 @@ function testAccount(username: string) {
           </el-form-item>
         </div>
         <el-button :loading="loading" type="primary" size="large" style="width: 100%; margin-top: 20px;"
-          @click.prevent="handleReset">
+          @click.prevent="onReset">
           确认
         </el-button>
         <div class="sub-link">
@@ -321,9 +177,141 @@ function testAccount(username: string) {
   </div>
 </template>
 
+<script lang="ts" setup name="Login">
+import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/store/modules/user'
+
+const route = useRoute()
+const router = useRouter()
+const userStore = useUserStore()
+const banner = new URL('../assets/images/login-banner.png', import.meta.url).href
+const title = import.meta.env.VITE_APP_TITLE
+// 表单类型，login 登录，reset 重置密码
+const formType = ref('login')
+const loading = ref(false)
+const redirect = ref(route.query.redirect?.toString() ?? '/')
+
+// 登录
+const loginFormRef = ref<FormInstance>()
+const loginForm = reactive({
+  username: localStorage.login_username || 'admin',
+  password: 'admin123',
+  remember: !!localStorage.login_username,
+})
+const loginRules = reactive<FormRules>({
+  username: [
+    { required: true, trigger: 'blur', message: '请输入用户名' },
+  ],
+  password: [
+    { required: true, trigger: 'blur', message: '请输入密码' },
+    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
+  ],
+})
+const onLogin = () => {
+  loginFormRef.value && loginFormRef.value.validate(async valid => {
+    if (!valid) { return }
+    loading.value = true
+    await userStore.login(loginForm).catch(onLoginError)
+    loading.value = false
+    loginForm.remember
+      ? localStorage.setItem('login_username', loginForm.username)
+      : localStorage.removeItem('login_username')
+    router.push(redirect.value)
+  })
+}
+const onLoginError = (error: any) => {
+  console.log('登录错误')
+  console.log(error)
+  loading.value = false
+}
+
+// 注册
+const registerFormRef = ref<FormInstance>()
+const registerForm = reactive({
+  username: '',
+  captcha: '',
+  password: '',
+  checkPassword: '',
+})
+const registerRules = reactive<FormRules>({
+  username: [
+    { required: true, trigger: 'blur', message: '请输入用户名' },
+  ],
+  captcha: [
+    { required: true, trigger: 'blur', message: '请输入验证码' },
+  ],
+  password: [
+    { required: true, trigger: 'blur', message: '请输入密码' },
+    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
+  ],
+  checkPassword: [
+    { required: true, trigger: 'blur', message: '请再次输入密码' },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== registerForm.password) {
+          callback(new Error('两次输入的密码不一致'))
+        }
+        else {
+          callback()
+        }
+      },
+    },
+  ],
+})
+const onRegister = () => {
+  ElMessage({
+    message: '注册模块仅提供界面演示，无实际功能，需开发者自行扩展',
+    type: 'warning',
+  })
+  registerFormRef.value && registerFormRef.value.validate((valid) => {
+    if (valid) {
+      // 这里编写业务代码
+    }
+  })
+}
+
+// 重置密码
+const resetFormRef = ref<FormInstance>()
+const resetForm = reactive({
+  username: localStorage.login_username || '',
+  captcha: '',
+  newPassword: '',
+})
+const resetRules = reactive<FormRules>({
+  username: [
+    { required: true, trigger: 'blur', message: '请输入用户名' },
+  ],
+  captcha: [
+    { required: true, trigger: 'blur', message: '请输入验证码' },
+  ],
+  newPassword: [
+    { required: true, trigger: 'blur', message: '请输入新密码' },
+    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
+  ],
+})
+const onReset = () => {
+  ElMessage({
+    message: '重置密码模块仅提供界面演示，无实际功能，需开发者自行扩展',
+    type: 'warning',
+  })
+  resetFormRef.value && resetFormRef.value.validate((valid) => {
+    if (valid) {
+      // 这里编写业务代码
+    }
+  })
+}
+
+const testAccount = (username: string) => {
+  loginForm.username = username
+  loginForm.password = '123456'
+  onLogin()
+}
+</script>
+
 <style lang="scss" scoped>
 [data-mode="mobile"] {
-  #login-box {
+  .login-box {
     position: relative;
     width: 100%;
     height: 100%;
@@ -334,11 +322,9 @@ function testAccount(username: string) {
     justify-content: start;
     border-radius: 0;
     box-shadow: none;
-
     .login-banner {
       width: 100%;
       padding: 20px 0;
-
       .banner {
         position: relative;
         right: inherit;
@@ -350,25 +336,21 @@ function testAccount(username: string) {
         transform: translateY(0);
       }
     }
-
     .login-form {
       width: 100%;
       min-height: auto;
       padding: 30px;
     }
   }
-
   .copyright {
     position: relative;
     bottom: 0;
     padding-bottom: 10px;
   }
 }
-
 :deep(input[type="password"]::-ms-reveal) {
   display: none;
 }
-
 .bg-banner {
   position: fixed;
   z-index: 0;
@@ -376,8 +358,7 @@ function testAccount(username: string) {
   height: 100%;
   background: radial-gradient(circle at center, var(--el-fill-color-lighter), var(--el-bg-color-page));
 }
-
-#login-box {
+.login-box {
   display: flex;
   justify-content: space-between;
   position: absolute;
@@ -388,19 +369,15 @@ function testAccount(username: string) {
   border-radius: 10px;
   overflow: hidden;
   box-shadow: var(--el-box-shadow);
-
   .login-banner {
     position: relative;
     width: 450px;
     background-color: var(--el-fill-color-light);
     overflow: hidden;
-
     .banner {
       width: 100%;
-
       @include position-center(y);
     }
-
     .logo {
       position: absolute;
       top: 20px;
@@ -483,7 +460,6 @@ function testAccount(username: string) {
     }
   }
 }
-
 .copyright {
   position: absolute;
   bottom: 30px;

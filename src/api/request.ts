@@ -2,7 +2,7 @@ import axios from 'axios'
 // import qs from 'qs'
 import { ElMessage } from 'element-plus'
 import router from '@/router/index'
-import useUserStore from '@/store/modules/user'
+import { useUserStore } from '@/store/modules/user'
 
 const toLogin = () => {
   useUserStore().logout().then(() => {
@@ -16,7 +16,7 @@ const toLogin = () => {
 }
 
 const api = axios.create({
-  baseURL: import.meta.env.DEV && (import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL),
+  baseURL: import.meta.env.DEV && (import.meta.env.VITE_OPEN_PROXY === 'true' ? '/api/v1/' : import.meta.env.VITE_APP_API_BASEURL),
   timeout: 1000 * 60,
   responseType: 'json',
 })
@@ -29,7 +29,7 @@ api.interceptors.request.use(
      * 以下代码为示例，在请求头里带上 token 信息
      */
     if (userStore.isLogin && request.headers) {
-      request.headers.Token = userStore.token
+      request.headers.Token = userStore.jwt
     }
     // 是否将 POST 请求参数进行字符串化处理
     if (request.method === 'post') {

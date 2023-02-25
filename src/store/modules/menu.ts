@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash-es'
 import useSettingsStore from './settings'
-import useUserStore from './user'
+import { useUserStore } from './user'
 import useRouteStore from './route'
 import type { Menu } from '#/global'
 

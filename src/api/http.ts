@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { ElMessage } from "element-plus";
 
 type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
 type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>
@@ -7,10 +8,8 @@ type DeleteConfig = Omit<AxiosRequestConfig, 'params'>
 
 export class Http {
   instance: AxiosInstance
-  constructor(baseURL: string) {
-    this.instance = axios.create({
-      baseURL
-    })
+  constructor(baseURL: string, timeout = 1000 * 60) {
+    this.instance = axios.create({ baseURL, timeout })
   }
   get<R = unknown>(url: string, query?: Record<string, JSONValue>, config?: GetConfig) {
     return this.instance.request<R>({ ...config, url: url, params: query, method: 'get' })
@@ -26,18 +25,18 @@ export class Http {
   }
 }
 
-const baseUrl: string = import.meta.env.DEV && (import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL)
+const baseUrl: string = import.meta.env.DEV && (import.meta.env.VITE_OPEN_PROXY === 'true' ? '/api/v1/' : import.meta.env.VITE_APP_API_BASEURL)
 export const http = new Http(baseUrl)
 
 // set header
 http.instance.interceptors.request.use(config => {
-  // const jwt = localStorage.getItem('jwt')
-  // if (jwt) {
-  //   config.headers!.Authorization = `Bearer ${jwt}`
-  // }
-  // if (config._autoLoading === true) {
-  //   console.log('加载中')
-  // }
+  const jwt = localStorage.getItem('jwt')
+  if (jwt) {
+    config.headers!.Authorization = `Bearer ${jwt}`
+  }
+  if (config._autoLoading === true) {
+    console.log('加载中')
+  }
   return config
 })
 
@@ -58,12 +57,17 @@ http.instance.interceptors.response.use((response) => {
 http.instance.interceptors.response.use(
   response => { return response },
   error => {
-    if (error.response) {
-      const axiosError = error as AxiosError
-      if (axiosError.response?.status === 429) {
-        alert('你太频繁了')
-      }
+    let { message } = error
+    if (message === 'Network Error') {
+      message = '后端网络故障'
     }
+    else if (message.includes('timeout')) {
+      message = '接口请求超时'
+    }
+    else if (message.includes('Request failed with status code')) {
+      message = `接口${message.substr(message.length - 3)}异常`
+    }
+    ElMessage({ message, type: 'error' })
     throw error
   }
 )
