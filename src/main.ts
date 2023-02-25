@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import App from './App.vue'
-import pinia from './store'
+import { pinia } from './store'
 import router from './router'
 import useSettingsStore from './store/modules/settings'
 
@@ -22,5 +22,4 @@ directive(app)
 if (useSettingsStore().settings.app.iconifyOfflineUse) {
   downloadAndInstall()
 }
-
 app.mount('#app')

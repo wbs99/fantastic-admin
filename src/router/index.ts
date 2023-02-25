@@ -4,7 +4,7 @@ import { useNProgress } from '@vueuse/integrations/useNProgress'
 import '@/assets/styles/nprogress.scss'
 // 路由相关数据
 import { asyncRoutes, asyncRoutesByFilesystem, constantRoutes, constantRoutesByFilesystem } from './routes'
-import pinia from '@/store'
+import { pinia } from '@/store'
 import useSettingsStore from '@/store/modules/settings'
 import useKeepAliveStore from '@/store/modules/keepAlive'
 import { useUserStore } from '@/store/modules/user'

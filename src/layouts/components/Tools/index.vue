@@ -5,34 +5,25 @@ import useSettingsStore from '@/store/modules/settings'
 import { useUserStore } from '@/store/modules/user'
 
 const router = useRouter()
-
 const settingsStore = useSettingsStore()
 const userStore = useUserStore()
-
 const mainPage = useMainPage()
 const { isFullscreen, toggle } = useFullscreen()
 
-function userCommand(command: 'home' | 'setting' | 'hotkeys' | 'logout') {
+async function userCommand(command: 'home' | 'setting' | 'hotkeys' | 'logout') {
   switch (command) {
     case 'home':
-      router.push({
-        name: 'home',
-      })
+      router.push({ name: 'home' })
       break
     case 'setting':
-      router.push({
-        name: 'personalSetting',
-      })
+      router.push({ name: 'personalSetting' })
       break
     case 'hotkeys':
       eventBus.emit('global-hotkeys-intro-toggle')
       break
     case 'logout':
-      userStore.logout().then(() => {
-        router.push({
-          name: 'login',
-        })
-      })
+      await userStore.logout()
+      router.push({ name: 'login' })
       break
   }
 }
@@ -109,10 +100,8 @@ function userCommand(command: 'home' | 'setting' | 'hotkeys' | 'logout') {
   align-items: center;
   padding: 0 20px;
   white-space: nowrap;
-
   .buttons {
     margin-right: 20px;
-
     .item {
       display: inline-flex;
       align-items: center;
@@ -121,7 +110,6 @@ function userCommand(command: 'home' | 'setting' | 'hotkeys' | 'logout') {
       width: 34px;
       cursor: pointer;
       vertical-align: middle;
-
       .el-icon {
         color: var(--el-text-color-primary);
         transition: var(--el-transition-color);
@@ -129,13 +117,11 @@ function userCommand(command: 'home' | 'setting' | 'hotkeys' | 'logout') {
     }
   }
 }
-
 :deep(.user-container) {
   display: inline-block;
   height: 24px;
   line-height: 24px;
   cursor: pointer;
-
   .user-wrapper {
     .el-avatar {
       vertical-align: middle;

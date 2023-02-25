@@ -14,17 +14,18 @@ export const useUserStore = defineStore(
     const isLogin = computed(() => jwt.value)
 
     // 登录
-    async function login(data: Login) {
+    const login = async (data: Login) => {
       const response = await fetchJwtApi(data)
       jwt.value = response.data
       localStorage.setItem('jwt', response.data)
       const meResponse = await fetchMeApi()
       username.value = meResponse.data.nickname
+      permissions.value = meResponse.data.permissions
       localStorage.setItem('username', meResponse.data.nickname)
     }
 
     // 登出
-    async function logout() {
+    const logout = async () => {
       localStorage.removeItem('username')
       localStorage.removeItem('jwt')
       username.value = ''
@@ -35,13 +36,6 @@ export const useUserStore = defineStore(
 
     // 获取我的权限
     async function getPermissions() {
-      const response = await api.get('member/permission', {
-        baseURL: '/mock/',
-        params: {
-          username: username.value,
-        },
-      })
-      permissions.value = response.data.permissions
       return permissions.value
     }
     // 修改密码
@@ -69,4 +63,7 @@ export const useUserStore = defineStore(
       editPassword,
     }
   },
+  {
+    persist: true,
+  }
 )

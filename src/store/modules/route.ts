@@ -146,6 +146,8 @@ const useRouteStore = defineStore(
       // 如果权限功能开启，则需要对路由数据进行筛选过滤
       if (settingsStore.settings.app.enablePermission) {
         const permissions = await userStore.getPermissions()
+        console.log('这是所有权限')
+        console.log(permissions)
         accessedRoutes = filterAsyncRoutes(asyncRoutes, permissions)
       }
       else {
