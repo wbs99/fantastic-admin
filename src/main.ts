@@ -3,7 +3,7 @@ import ElementPlus from 'element-plus'
 import App from './App.vue'
 import { pinia } from './store'
 import router from './router'
-import useSettingsStore from './store/modules/settings'
+import { useSettingsStore } from './store/modules/settings'
 
 // 自定义指令
 import directive from '@/utils/directive'

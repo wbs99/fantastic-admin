@@ -1,6 +1,6 @@
 import { fetchJwtApi, fetchMeApi } from './../../api/index';
-import useRouteStore from './route'
-import useMenuStore from './menu'
+import { useRouteStore } from './route'
+import { useMenuStore } from './menu'
 import api from '@/api/request'
 
 export const useUserStore = defineStore(

@@ -4,8 +4,7 @@ import type { RecursiveRequired, Settings } from '#/global'
 import settingsCustom from '@/settings'
 import settingsDefault from '@/settings.default'
 
-const useSettingsStore = defineStore(
-  // 唯一ID
+export const useSettingsStore = defineStore(
   'settings',
   () => {
     const mergeSettings: RecursiveRequired<Settings.all> = defaultsDeep(settingsCustom, settingsDefault)
@@ -103,5 +102,3 @@ const useSettingsStore = defineStore(
     }
   },
 )
-
-export default useSettingsStore

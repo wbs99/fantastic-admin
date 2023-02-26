@@ -1,7 +1,7 @@
 <script lang="ts" setup name="MainSidebar">
 import Logo from '../Logo/index.vue'
-import useSettingsStore from '@/store/modules/settings'
-import useMenuStore from '@/store/modules/menu'
+import {useSettingsStore} from '@/store/modules/settings'
+import { useMenuStore } from '@/store/modules/menu'
 
 const settingsStore = useSettingsStore()
 const menuStore = useMenuStore()
@@ -11,16 +11,16 @@ const { switchTo } = useMenu()
 
 <template>
   <transition name="main-sidebar">
-    <div v-if="settingsStore.settings.menu.menuMode === 'side' || (settingsStore.mode === 'mobile' && settingsStore.settings.menu.menuMode !== 'single')" class="main-sidebar-container">
+    <div
+      v-if="settingsStore.settings.menu.menuMode === 'side' || (settingsStore.mode === 'mobile' && settingsStore.settings.menu.menuMode !== 'single')"
+      class="main-sidebar-container">
       <Logo :show-title="false" class="sidebar-logo" />
       <!-- 侧边栏模式（含主导航） -->
       <div class="nav">
         <template v-for="(item, index) in menuStore.allMenus">
-          <div
-            v-if="item.children && item.children.length !== 0" :key="index" class="item" :class="{
-              active: index === menuStore.actived,
-            }" :title="item.meta?.title ?? '[ 无标题 ]'" @click="switchTo(index)"
-          >
+          <div v-if="item.children && item.children.length !== 0" :key="index" class="item" :class="{
+            active: index === menuStore.actived,
+          }" :title="item.meta?.title ?? '[ 无标题 ]'" @click="switchTo(index)">
             <el-icon v-if="item.meta?.icon">
               <svg-icon :name="item.meta.icon" />
             </el-icon>

@@ -1,4 +1,4 @@
-import useSettingsStore from '@/store/modules/settings'
+import { useSettingsStore } from '@/store/modules/settings'
 import { useUserStore } from '@/store/modules/user'
 
 export default function useAuth() {

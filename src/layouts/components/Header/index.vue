@@ -1,8 +1,8 @@
 <script lang="ts" setup name="Header">
 import Logo from '../Logo/index.vue'
 import Tools from '../Tools/index.vue'
-import useSettingsStore from '@/store/modules/settings'
-import useMenuStore from '@/store/modules/menu'
+import { useSettingsStore } from '@/store/modules/settings'
+import { useMenuStore } from '@/store/modules/menu'
 
 const settingsStore = useSettingsStore()
 const menuStore = useMenuStore()
@@ -28,7 +28,8 @@ function handlerMouserScroll(event: WheelEvent) {
           <!-- 顶部模式 -->
           <div ref="navRef" class="nav" @wheel.prevent="handlerMouserScroll">
             <template v-for="(item, index) in menuStore.allMenus" :key="index">
-              <div v-if="item.children && item.children.length !== 0" class="item-container" :class="{ active: index === menuStore.actived }">
+              <div v-if="item.children && item.children.length !== 0" class="item-container"
+                :class="{ active: index === menuStore.actived }">
                 <div class="item" @click="switchTo(index)">
                   <el-icon v-if="item.meta?.icon">
                     <svg-icon :name="item.meta.icon" />

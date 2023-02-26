@@ -1,7 +1,7 @@
 <script lang="ts" setup name="Tools">
 import { useFullscreen } from '@vueuse/core'
 import eventBus from '@/utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
+import { useSettingsStore } from '@/store/modules/settings'
 import { useUserStore } from '@/store/modules/user'
 
 const router = useRouter()

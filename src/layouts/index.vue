@@ -8,9 +8,9 @@ import Topbar from './components/Topbar/index.vue'
 import Search from './components/Search/index.vue'
 import AppSetting from './components/AppSetting/index.vue'
 import HotkeysIntro from './components/HotkeysIntro/index.vue'
-import useSettingsStore from '@/store/modules/settings'
-import useKeepAliveStore from '@/store/modules/keepAlive'
-import useMenuStore from '@/store/modules/menu'
+import { useSettingsStore } from '@/store/modules/settings'
+import { useKeepAliveStore } from '@/store/modules/keepAlive'
+import { useMenuStore } from '@/store/modules/menu'
 
 const routeInfo = useRoute()
 
@@ -64,13 +64,17 @@ onUnmounted(() => {
     <div id="app-main">
       <Header />
       <div class="wrapper">
-        <div class="sidebar-container" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }">
+        <div class="sidebar-container"
+          :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }">
           <MainSidebar />
           <SubSidebar />
         </div>
-        <div class="sidebar-mask" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()" />
+        <div class="sidebar-mask"
+          :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }"
+          @click="settingsStore.toggleSidebarCollapse()" />
         <div class="main-container" :style="{ 'padding-bottom': $route.meta.paddingBottom } as any">
-          <Topbar v-if="!(settingsStore.settings.menu.menuMode === 'head' && !settingsStore.settings.menu.enableSubMenuCollapseButton && !settingsStore.settings.breadcrumb.enable)" />
+          <Topbar
+            v-if="!(settingsStore.settings.menu.menuMode === 'head' && !settingsStore.settings.menu.enableSubMenuCollapseButton && !settingsStore.settings.breadcrumb.enable)" />
           <div class="main">
             <router-view v-slot="{ Component, route }">
               <transition name="main" mode="out-in" appear>

@@ -2,7 +2,7 @@
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import hotkeys from 'hotkeys-js'
 import eventBus from './utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
+import { useSettingsStore } from '@/store/modules/settings'
 
 const settingsStore = useSettingsStore()
 
@@ -54,12 +54,10 @@ onMounted(() => {
 
 <template>
   <el-config-provider :locale="zhCn" :size="settingsStore.settings.app.elementSize" :button="buttonConfig">
-    <RouterView
-      :style="{
-        '--g-main-sidebar-actual-width': mainSidebarActualWidth,
-        '--g-sub-sidebar-actual-width': subSidebarActualWidth,
-      }"
-    />
+    <RouterView :style="{
+      '--g-main-sidebar-actual-width': mainSidebarActualWidth,
+      '--g-sub-sidebar-actual-width': subSidebarActualWidth,
+    }" />
     <system-info />
   </el-config-provider>
 </template>

@@ -5,11 +5,11 @@ import '@/assets/styles/nprogress.scss'
 // 路由相关数据
 import { asyncRoutes, asyncRoutesByFilesystem, constantRoutes, constantRoutesByFilesystem } from './routes'
 import { pinia } from '@/store'
-import useSettingsStore from '@/store/modules/settings'
-import useKeepAliveStore from '@/store/modules/keepAlive'
+import { useSettingsStore } from '@/store/modules/settings'
+import { useKeepAliveStore } from '@/store/modules/keepAlive'
 import { useUserStore } from '@/store/modules/user'
-import useMenuStore from '@/store/modules/menu'
-import useRouteStore from '@/store/modules/route'
+import { useMenuStore } from '@/store/modules/menu'
+import { useRouteStore } from '@/store/modules/route'
 
 const { isLoading } = useNProgress()
 

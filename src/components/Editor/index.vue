@@ -18,7 +18,7 @@ import 'tinymce/plugins/wordcount'
 import 'tinymce/plugins/code'
 import 'tinymce/plugins/searchreplace'
 
-import useSettingsStore from '@/store/modules/settings'
+import { useSettingsStore } from '@/store/modules/settings'
 
 const props = defineProps({
   modelValue: {
@@ -27,7 +27,7 @@ const props = defineProps({
   },
   setting: {
     type: Object,
-    default: () => {},
+    default: () => { },
   },
   disabled: {
     type: Boolean,

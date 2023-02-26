@@ -1,8 +1,8 @@
 <script lang="ts" setup name="SubSidebar">
 import Logo from '../Logo/index.vue'
 import SidebarItem from '../SidebarItem/index.vue'
-import useSettingsStore from '@/store/modules/settings'
-import useMenuStore from '@/store/modules/menu'
+import { useSettingsStore } from '@/store/modules/settings'
+import { useMenuStore } from '@/store/modules/menu'
 
 const settingsStore = useSettingsStore()
 const menuStore = useMenuStore()
@@ -15,22 +15,25 @@ function onSidebarScroll(e: Event) {
 </script>
 
 <template>
-  <div v-if="['side', 'head', 'single'].includes(settingsStore.settings.menu.menuMode) || settingsStore.mode === 'mobile'" class="sub-sidebar-container" :class="{ 'is-collapse': settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse }" @scroll="onSidebarScroll">
-    <Logo
-      :show-logo="settingsStore.settings.menu.menuMode === 'single'" class="sidebar-logo" :class="{
-        'sidebar-logo-bg': settingsStore.settings.menu.menuMode === 'single',
-        'shadow': sidebarScrollTop,
-      }"
-    />
+  <div v-if="['side', 'head', 'single'].includes(settingsStore.settings.menu.menuMode) || settingsStore.mode === 'mobile'"
+    class="sub-sidebar-container"
+    :class="{ 'is-collapse': settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse }"
+    @scroll="onSidebarScroll">
+    <Logo :show-logo="settingsStore.settings.menu.menuMode === 'single'" class="sidebar-logo" :class="{
+      'sidebar-logo-bg': settingsStore.settings.menu.menuMode === 'single',
+      'shadow': sidebarScrollTop,
+    }" />
     <!-- 侧边栏模式（无主导航） -->
-    <el-menu
-      :unique-opened="settingsStore.settings.menu.subMenuUniqueOpened" :default-openeds="menuStore.defaultOpenedPaths" :default-active="$route.meta.activeMenu || $route.path" :collapse="settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse" :collapse-transition="false" :class="{
+    <el-menu :unique-opened="settingsStore.settings.menu.subMenuUniqueOpened"
+      :default-openeds="menuStore.defaultOpenedPaths" :default-active="$route.meta.activeMenu || $route.path"
+      :collapse="settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse" :collapse-transition="false"
+      :class="{
         'is-collapse-without-logo': settingsStore.settings.menu.menuMode !== 'single' && settingsStore.settings.menu.subMenuCollapse,
-      }"
-    >
+      }">
       <transition-group name="sub-sidebar">
         <template v-for="(route, index) in menuStore.sidebarMenus">
-          <SidebarItem v-if="route.meta?.sidebar !== false" :key="route.path || index" :item="route" :base-path="route.path" />
+          <SidebarItem v-if="route.meta?.sidebar !== false" :key="route.path || index" :item="route"
+            :base-path="route.path" />
         </template>
       </transition-group>
     </el-menu>

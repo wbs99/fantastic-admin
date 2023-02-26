@@ -3,9 +3,9 @@ import { cloneDeep } from 'lodash-es'
 import hotkeys from 'hotkeys-js'
 import type { RouteRecordRaw } from 'vue-router'
 import eventBus from '@/utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
-import useRouteStore from '@/store/modules/route'
-import useMenuStore from '@/store/modules/menu'
+import { useSettingsStore } from '@/store/modules/settings'
+import { useRouteStore } from '@/store/modules/route'
+import { useMenuStore } from '@/store/modules/menu'
 import type { Menu } from '#/global'
 
 const router = useRouter()
@@ -238,7 +238,9 @@ function pageJump(path: listTypes['path'], link: listTypes['link']) {
   <div id="search" :class="{ searching: isShow }" @click="isShow && eventBus.emit('global-search-toggle')">
     <div class="container">
       <div class="search-box" @click.stop>
-        <el-input ref="searchInputRef" v-model="searchInput" placeholder="搜索页面，支持标题、URL模糊查询" clearable @keydown.esc="eventBus.emit('global-search-toggle')" @keydown.up.prevent="keyUp" @keydown.down.prevent="keyDown" @keydown.enter.prevent="keyEnter">
+        <el-input ref="searchInputRef" v-model="searchInput" placeholder="搜索页面，支持标题、URL模糊查询" clearable
+          @keydown.esc="eventBus.emit('global-search-toggle')" @keydown.up.prevent="keyUp" @keydown.down.prevent="keyDown"
+          @keydown.enter.prevent="keyEnter">
           <template #prefix>
             <el-icon>
               <svg-icon name="ep:search" />
@@ -290,7 +292,8 @@ function pageJump(path: listTypes['path'], link: listTypes['link']) {
         </div>
       </div>
       <div ref="searchResultRef" class="result">
-        <a v-for="(item, index) in resultList" :key="item.path" :ref="setSearchResultItemRef" class="item" :class="{ actived: index === actived }" @click="pageJump(item.path, item.link)" @mouseover="actived = index">
+        <a v-for="(item, index) in resultList" :key="item.path" :ref="setSearchResultItemRef" class="item"
+          :class="{ actived: index === actived }" @click="pageJump(item.path, item.link)" @mouseover="actived = index">
           <el-icon class="icon">
             <svg-icon v-if="item.icon" :name="item.icon" />
           </el-icon>

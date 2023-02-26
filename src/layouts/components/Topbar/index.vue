@@ -1,7 +1,7 @@
 <script lang="ts" setup name="Topbar">
 import { compile } from 'path-to-regexp'
 import Tools from '../Tools/index.vue'
-import useSettingsStore from '@/store/modules/settings'
+import { useSettingsStore } from '@/store/modules/settings'
 
 const route = useRoute()
 
@@ -10,7 +10,7 @@ const settingsStore = useSettingsStore()
 const enableSubMenuCollapseButton = computed(() => {
   return settingsStore.mode === 'mobile' || (
     ['side', 'head', 'single'].includes(settingsStore.settings.menu.menuMode)
-      && settingsStore.settings.menu.enableSubMenuCollapseButton
+    && settingsStore.settings.menu.enableSubMenuCollapseButton
   )
 })
 
@@ -51,22 +51,24 @@ function pathCompile(path: string) {
 </script>
 
 <template>
-  <div
-    class="topbar-container" :class="{
-      [`topbar-${settingsStore.settings.topbar.mode}`]: true,
-      shadow: scrollTop,
-      hide: scrollOnHide,
-    }" data-fixed-calc-width
-  >
+  <div class="topbar-container" :class="{
+    [`topbar-${settingsStore.settings.topbar.mode}`]: true,
+    shadow: scrollTop,
+    hide: scrollOnHide,
+  }" data-fixed-calc-width>
     <div class="left-box">
-      <div v-if="enableSubMenuCollapseButton" class="sidebar-collapse" :class="{ 'is-collapse': settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()">
+      <div v-if="enableSubMenuCollapseButton" class="sidebar-collapse"
+        :class="{ 'is-collapse': settingsStore.settings.menu.subMenuCollapse }"
+        @click="settingsStore.toggleSidebarCollapse()">
         <el-icon>
           <svg-icon name="toolbar-collapse" />
         </el-icon>
       </div>
-      <el-breadcrumb v-if="settingsStore.settings.breadcrumb.enable && settingsStore.mode === 'pc' && settingsStore.settings.app.routeBaseOn !== 'filesystem'">
+      <el-breadcrumb
+        v-if="settingsStore.settings.breadcrumb.enable && settingsStore.mode === 'pc' && settingsStore.settings.app.routeBaseOn !== 'filesystem'">
         <transition-group name="breadcrumb">
-          <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path" :to="index < breadcrumbList.length - 1 ? pathCompile(item.path) : ''">
+          <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path"
+            :to="index < breadcrumbList.length - 1 ? pathCompile(item.path) : ''">
             {{ item.title ?? '[ 无标题 ]' }}
           </el-breadcrumb-item>
         </transition-group>

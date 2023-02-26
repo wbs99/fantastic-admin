@@ -1,15 +1,14 @@
 import { cloneDeep } from 'lodash-es'
-import useSettingsStore from './settings'
+import { useSettingsStore } from './settings'
 import { useUserStore } from './user'
-import useRouteStore from './route'
+import { useRouteStore } from './route'
 import type { Menu } from '#/global'
 
 import { resolveRoutePath } from '@/utils'
 import api from '@/api/request'
 import menu from '@/menu'
 
-const useMenuStore = defineStore(
-  // 唯一ID
+export const useMenuStore = defineStore(
   'menu',
   () => {
     const settingsStore = useSettingsStore()
@@ -186,5 +185,3 @@ const useMenuStore = defineStore(
     }
   },
 )
-
-export default useMenuStore
